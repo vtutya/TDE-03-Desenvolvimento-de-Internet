@@ -14,7 +14,7 @@ const procurarBotao = document.getElementById("botao-busca")
 const paisInput = document.getElementById("pais")
 const infoPais = document.getElementById("informacoes-paises")
 const historicoBusca = document.getElementById("historico-pesquisa")
-const limparHistorico = document.getElementById("limpar")
+const botaoLimparHistorico = document.getElementById("limpar")
 
 const KEY_LOCAL_STORAGE = "historicoDeBusca"  // chave para o LocalStorage
 
@@ -28,23 +28,24 @@ procurarBotao.addEventListener("click", () => {
 });
 
 //Quando clicar no botao de LIMPAR HISTORICO
-limparHistorico.addEventListener("click", limparHistorico);
+botaoLimparHistorico.addEventListener("click", limparHistorico);
 
 // Quando a lista de historicco for clicada
 historicoBusca.addEventListener("click", (event) => {
     if (event.target.tagName === "LI") {  // Verifica se o elemento clicado é um item da lista
         const nomePais = event.target.textContent; // Pega o nome do país do item clicado
+        buscarPais(nomePais);
     }
 });
 
 
 // Quando carrega a página pela primeira vez
-document.addEventListener("DOMContentLoaded", historicoBusca);
+document.addEventListener("DOMContentLoaded", carregarHistorico);
 
 
 // funcao para buscar dados na API
 async function buscarPais(nomePais){
-    const URL_API = 'https://restcountries.com/${nomePais}';
+    const URL_API = `https://restcountries.com/v3.1/name/${nomePais}`;
     
     try {
         const resposta = await fetch(URL_API);
@@ -102,7 +103,7 @@ function salvarHistorico(nomePais){
 
     localStorage.setItem(KEY_LOCAL_STORAGE, JSON.stringify(novoHistorico));
 
-    atualizarHistoricoDisplay();
+    carregarHistorico();
 }
 
 // funcao para carregar o historico 
